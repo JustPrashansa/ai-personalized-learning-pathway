@@ -1,6 +1,10 @@
 from openai import OpenAI
 from utils.persona_mapping import persona_text
-client=OpenAI(api_key='YOUR_GROQ_API_KEY',base_url="https://api.groq.com/openai/v1")
+import os
+from dotenv import load_dotenv
+load_dotenv()
+client = OpenAI(api_key=os.getenv("GROQ_API_KEY"), base_url="https://api.groq.com/openai/v1")
+
 def pathway_gen(student):
     persona=student["Persona"]
     prompt=f"""
