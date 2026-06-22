@@ -2,30 +2,32 @@
 
 ## Overview
 
-This project is a hybrid Artificial Intelligence system that combines Machine Learning and Large Language Models (LLMs) to generate personalized learning pathways for students. The system analyzes student behavioral and academic data, identifies learner personas using K-Means Clustering, and generates personalized recommendations, strengths, weaknesses, resources and learning pathways using the Llama 3.3 70B Versatile Large Language Model.
+This project is a hybrid Artificial Intelligence system that combines Machine Learning and Large Language Models (LLMs) to generate personalized learning pathways for students. The system analyzes student behavioral and academic data, identifies learner personas using K-Means Clustering, and generates personalized recommendations, strengths, weaknesses, resources, and learning pathways using the Llama 3.3 70B Versatile Large Language Model via the Groq API.
+
+Built as part of my exploration into combining traditional Machine Learning with Generative AI to solve real personalization problems in education.
 
 ## Features
 
-* Student behavior analysis
+* Student behavior and academic data analysis
 * Learner persona identification using K-Means Clustering
-* Data preprocessing and feature scaling
-* Persona-based student segmentation
-* AI-generated profile summaries
+* Data preprocessing, cleaning, and feature scaling (StandardScaler)
+* Cluster validation using Silhouette Score
+* Persona-based student segmentation across 5 distinct learner types
+* AI-generated profile summaries via LLM
 * Personalized learning recommendations
-* Strength and weakness analysis
-* Learning pathway generation
-* Data visualization and analytics
+* Strength and weakness analysis per student
+* Short-term, mid-term, and long-term learning pathway generation
+* Data visualization and analytics (cluster distribution, exam score by persona, stress level by persona, feature correlation heatmap)
 
 ## Technologies Used
 
 * Python
-* Pandas
-* NumPy
-* Scikit-Learn
-* Matplotlib
-* Seaborn
+* Pandas, NumPy
+* Scikit-Learn (K-Means Clustering, StandardScaler, Silhouette Score)
+* Matplotlib, Seaborn
 * Groq API
 * Llama 3.3 70B Versatile LLM
+* python-dotenv (for secure API key management)
 
 ## Project Structure
 
@@ -40,7 +42,7 @@ AI-Personalized-Learning-Pathway/
 │   └── scaler.pkl
 │
 ├── notebook/
-│   └── Training.ipynb
+│   └── training.ipynb
 │
 ├── services/
 │   ├── persona_predictor.py
@@ -49,18 +51,22 @@ AI-Personalized-Learning-Pathway/
 ├── utils/
 │   └── persona_mapping.py
 │
+├── .env (not tracked — holds API key)
+├── .gitignore
 └── app.py
 ```
 
 ## Workflow
 
+```text
 Student Dataset
-→ Data Preprocessing
-→ Feature Selection & Scaling
-→ K-Means Clustering
-→ Learner Persona Generation
-→ Llama 3.3 LLM
-→ Personalized Learning Pathway
+  → Data Preprocessing & Cleaning
+  → Feature Selection & Scaling
+  → K-Means Clustering (validated via Silhouette Score)
+  → Learner Persona Generation (5 personas)
+  → Llama 3.3 70B LLM (via Groq API)
+  → Personalized Learning Pathway Output
+```
 
 ## Dataset Features
 
@@ -81,24 +87,27 @@ The dataset contains behavioral and academic attributes including:
 
 ## Results
 
-The project successfully identified five learner personas:
+The K-Means model successfully identified five distinct learner personas:
 
-* Self Learner
-* Social Learner
-* Silent Learner
-* Balanced Learner
-* Elite Learner
+| Persona          | Description                                                 |
+| ---------------- | ----------------------------------------------------------- |
+| Self Learner     | Independent and self-motivated, mostly studies individually |
+| Social Learner   | Learns best through collaboration and discussion            |
+| Silent Learner   | Learns mostly by observing, limited collaboration           |
+| Balanced Learner | Balances self-study and collaboration effectively           |
+| Elite Learner    | Highly focused, strong performance and discipline           |
 
-The generated learner personas were further utilized by the LLM to produce personalized learning recommendations and pathways tailored to individual student needs.
+Each identified persona is passed to the LLM along with the student's individual data (study hours, attendance, motivation, stress level, etc.) to generate a fully personalized output — including a profile summary, strengths, weaknesses, recommended resources, and a structured learning pathway with short-term (6 weeks), mid-term (12 weeks), and long-term (6 months) goals.
+
+## Security Note
+
+API keys are managed through environment variables using `python-dotenv` and excluded from version control via `.gitignore`, following standard security practices for credential management.
 
 ## Future Improvements
 
-* Web-based user interface
+* Web-based user interface (Streamlit/Flask)
 * Real-time student progress tracking
-* Retrieval-Augmented Generation (RAG)
+* Retrieval-Augmented Generation (RAG) for resource recommendations
 * Integration with Learning Management Systems (LMS)
-* Additional clustering and classification models
-* Larger real-world educational datasets
-
-
-Krishna Institute of Engineering and Technology (KIET)
+* Additional clustering and classification model comparisons
+* Larger, more diverse real-world educational datasets
